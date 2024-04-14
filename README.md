@@ -1,9 +1,9 @@
-# Address Api.
 
-* API developed following the non -blocking reactive model with 17 Java and Spring Webflux.
+# <img src="img/img.png" alt="Address Api" width="35" height="35"> Address Api   
 
+* API developed following the non-blocking reactive model with 17 Java and Spring Webflux.
+---
 ### ⚡ Technologies
-
 These are some of the technologies and tools that I work with:<br>
 
 ![Java 17](https://img.shields.io/badge/-Java%2017-007396?style=flat-square&logo=java&logoColor=white)
@@ -13,16 +13,13 @@ These are some of the technologies and tools that I work with:<br>
 ![OpenTelemetry](https://img.shields.io/badge/-OpenTelemetry-CF6300?style=flat-square&logo=opentelemetry&logoColor=white)
 
 
-
-
-
-### Flow to obtain the address
-<img src="./img/addresses-find-by-zipcode.svg" alt="Flow to obtain the address" width="1366" height="860">
-
 ---
+## <img src="img/flow.png" alt="Address Api" width="35" height="35"> Flow to obtain the address
+* <img src="./img/addresses-find-by-zipcode.svg" alt="Flow to obtain the address" width="1366" height="860">
 
 ## Configuration for telemetry collection with Optionlemetry and Jaeger.
 
+---
 ### Imagen Docker [ docker-compose.yaml ] - [ OpenTelemetry e Jaeger ]
 ```yaml
 version: '3.8'
@@ -57,6 +54,8 @@ services:
       - collector-api
 ```
 ### otel-collector-config-yaml
+
+---
 ```yaml
 receivers:
   otlp:
@@ -76,6 +75,8 @@ service:
 ```
 
 ### Configuration of Spring Actuator in your Spring application from Collecting Detailed Metrics
+
+---
 ```yaml
 management:
   tracing:
@@ -116,6 +117,8 @@ info:
 ```
 
 ### Maven
+
+---
 
 ```xml
 <!--Dependencies -->
