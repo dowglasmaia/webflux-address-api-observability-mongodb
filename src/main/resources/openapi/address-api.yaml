@@ -1,0 +1,71 @@
+openapi: 3.0.3
+info:
+  title: MS Address API
+  description: |
+    This API provides operations related to client addresses. It follows the OpenAPI 3.0 specification.
+  contact:
+    email: dowglasmaia@live.com
+  version: 1.0.0
+tags:
+  - name: Address
+  - name: External-Api
+paths:
+  /addresses/find-by-zipcode:
+    get:
+      tags:
+        - Address
+      summary: Find Address by Zipcode
+      description: Retrieve the address of a client by their ID.
+      operationId: findByZipCode
+      parameters:
+        - name: zipCode
+          in: query
+          description: ZipCodeID of the Address
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AddressResponse'
+        '404':
+          description: Address not found
+        '500':
+          description: Internal server error
+        '503':
+          description: Service unavailable
+
+components:
+  schemas:
+    AddressResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the address
+        street:
+          type: string
+          description: Street address
+          example: 437 Lytton Ave
+        neighborhood:
+          type: string
+          example: Center
+        number:
+          type: string
+          description: Street number
+          example: 437
+        city:
+          type: string
+          description: City
+          example: Palo Alto
+        state:
+          type: string
+          description: State abbreviation
+          example: CA
+        zip:
+          type: string
+          description: ZIP code
+          example: '94301'
