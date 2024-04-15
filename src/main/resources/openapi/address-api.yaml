@@ -24,6 +24,7 @@ paths:
           required: true
           schema:
             type: string
+            pattern: '^\d{5}-\d{3}$'
       responses:
         '200':
           description: Successful operation

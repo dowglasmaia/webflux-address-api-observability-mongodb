@@ -3,12 +3,14 @@ package com.dowglasmaia.address.service.impl;
 
 import br.com.dowglasmaia.openapi.model.AddressResponse;
 import com.dowglasmaia.address.document.AddressDocument;
+import com.dowglasmaia.address.exeptions.BusinessException;
 import com.dowglasmaia.address.exeptions.NotFoundException;
 import com.dowglasmaia.address.integration.ViaCepApiIntegration;
 import com.dowglasmaia.address.repository.AddressRepository;
 import com.dowglasmaia.address.service.AddressService;
 import com.dowglasmaia.address.service.mapper.AddressMapper;
 import com.dowglasmaia.address.service.mapper.AddressModelIntegrationMapper;
+import com.dowglasmaia.address.util.ZipCodeValidator;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,22 +27,26 @@ public class AddressServiceImpl implements AddressService {
     @Autowired
     private ViaCepApiIntegration viaCepApiIntegration;
 
+
     @Override
     public Mono<AddressResponse> findByZipCode(String zipCode) {
-        return repository.findByZip(zipCode)
-                .doFirst(() -> log.info("Start Method findByZipCode with zipCode: {}", zipCode))
-                .map(document -> mapper.toAddressResponse(document))
-                .switchIfEmpty(
-                        this.getAddressByViaCepApi(zipCode)
-                                .doFirst(() -> log.info("Address not exist in DataBase with zip Code: {}", zipCode))
-                                .doFirst(() -> log.info("Start Method getAddressByViaCepApi with zipCode: {}", zipCode))
-                                .flatMap(addressResponse -> insert(addressResponse))
+        if (ZipCodeValidator.isValidCEP(zipCode)) {
+            return repository.findByZip(zipCode)
+                    .doFirst(() -> log.info("Start Method findByZipCode with zipCode: {}", zipCode))
+                    .flatMap(document -> Mono.just(mapper.toAddressResponse(document)))
+                    .switchIfEmpty(
+                            this.getAddressByViaCepApi(zipCode)
+                                    .doFirst(() -> log.info("Address not exist in DataBase with zip Code: {}", zipCode))
+                                    .doFirst(() -> log.info("Start Method getAddressByViaCepApi with zipCode: {}", zipCode))
+                                    .flatMap(addressResponse -> insert(addressResponse))
 
-                )
-                .onErrorResume(error -> Mono.error(new NotFoundException("Find Address failed")))
-                .doOnSuccess(response -> log.info("Address found with Sucecessfully"))
-                .doOnError(error -> log.error("Find Address failed"));
+                    )
+                    .onErrorResume(error -> Mono.error(new RuntimeException("Unexpected error", error)))
+                    .doOnSuccess(response -> log.info("Address found with Sucecessfully"))
+                    .doOnError(error -> log.error("Find Address failed: {}", error.getMessage()));
+        }
 
+        return Mono.error(new BusinessException("Zip Code is Invalid"));
     }
 
 

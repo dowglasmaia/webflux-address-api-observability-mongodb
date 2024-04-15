@@ -1,16 +1,14 @@
 package com.dowglasmaia.address.integration.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ViaCepModel {
+    @Getter
     private String cep;
     private String logradouro;
     private String complemento;

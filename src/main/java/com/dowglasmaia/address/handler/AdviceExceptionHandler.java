@@ -1,5 +1,6 @@
 package com.dowglasmaia.address.handler;
 
+import com.dowglasmaia.address.exeptions.BusinessException;
 import com.dowglasmaia.address.exeptions.NotFoundException;
 import com.dowglasmaia.address.exeptions.StandardError;
 import lombok.extern.log4j.Log4j2;
@@ -14,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class AdviceExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
-    public Mono<ResponseEntity<StandardError>> handleNotFound(NotFoundException ex) {
+    public Mono<ResponseEntity<StandardError>> handleNotFoundException(NotFoundException ex) {
         StandardError error = StandardError.builder()
                 .timestamp(System.currentTimeMillis())
                 .error("Not Found")
@@ -22,5 +23,16 @@ public class AdviceExceptionHandler {
                 .status(HttpStatus.NOT_FOUND.value())
                 .build();
         return Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error));
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public Mono<ResponseEntity<StandardError>> handleBusinessException(BusinessException ex) {
+        StandardError error = StandardError.builder()
+                .timestamp(System.currentTimeMillis())
+                .error("Not Found")
+                .message(ex.getMessage())
+                .status(HttpStatus.UNPROCESSABLE_ENTITY.value())
+                .build();
+        return Mono.just(ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(error));
     }
 }
