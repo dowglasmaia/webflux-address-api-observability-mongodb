@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        JAVA_HOME = "${tool 'JAVA_11'}"
-        PATH = "${tool 'JAVA_11'}/bin:${env.PATH}"
+        JAVA_HOME = "${tool 'JAVA_17'}"
+        PATH = "${tool 'JAVA_17'}/bin:${env.PATH}"
         SCANNER_HOME = tool 'SONAR_SCANNER'
         SONARQUBE_LOCAL = 'SONAR_LOCAL'
         SONARQUBE_QG = 'SONAR_LOCAL_QG'  // Nome da configuração do Quality Gate no Jenkins
@@ -31,8 +31,7 @@ pipeline {
         stage('Sonar Analysis') {
             steps {
                     withSonarQubeEnv(SONARQUBE_LOCAL) {
-                        
-                        
+
                     }
             }
         }
@@ -46,11 +45,18 @@ pipeline {
             }
         }
 
+
         stage('Deploy Back-End') {
+            steps {
+                sleep(5)
+            }
+        }
+
+        /*stage('Deploy Back-End') {
             steps {
                 deploy adapters: [tomcat8(credentialsId: "${TOMCAT_LOGIN}", path: '', url: "${TOMCAT_URL}")], contextPath: 'tasks-backend', war: 'target/tasks-backend.war'
             }
-        }
+        }*/
     }
 }
 
