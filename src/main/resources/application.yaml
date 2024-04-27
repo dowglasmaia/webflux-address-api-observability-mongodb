@@ -3,7 +3,12 @@ spring:
     name: address-api
   data:
     mongodb:
-      uri: mongodb://localhost:27017/address
+      host: localhost
+      port: 27017
+      authentication-database: admin
+      username: root
+      password: example
+      database: addressdb
 
 management:
   tracing:
@@ -45,4 +50,4 @@ info:
     java:
       version: '@java.version@'
 server:
-  port: 8089
+  port: 8088

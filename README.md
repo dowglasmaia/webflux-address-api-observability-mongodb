@@ -185,5 +185,6 @@ java -javaagent:opentelemetry/opentelemetry-javaagent.jar -Dotel.service.name=ad
 * [Opentelemetry Docs](https://opentelemetry.io/docs)
 * [Jaeger Docs](https://www.jaegertracing.io/docs)
 * [Spring Webflux](https://docs.spring.io/spring-framework/reference/web/webflux.html)
+* [Dockerfile Reference](https://docs.docker.com/reference/dockerfile)
 
 

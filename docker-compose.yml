@@ -1,10 +1,10 @@
 version: '3.8'
+
 networks:
   public:
   monit:
-  data:
   api:
-  
+
 services:
   collector-api:
     image: otel/opentelemetry-collector:latest
@@ -26,5 +26,43 @@ services:
       - 16686:16686
     networks:
       - monit
+      - api
     depends_on:
-      - collector-api   
+      - collector-api
+
+  address-api:
+    image: dowglasmaia/address-api
+    container_name: address-api
+    environment:
+      - SPRING_DATASOURCE_HOST=localhost
+    networks:
+      - api
+    ports:
+      - 8088:8088
+    restart: unless-stopped
+
+  mongo:
+    container_name: mongo
+    image: mongo
+    restart: unless-stopped
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - api
+
+
+  mongo-express:
+    image: mongo-express
+    restart: unless-stopped
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_BASICAUTH: false
+    networks:
+      - api
