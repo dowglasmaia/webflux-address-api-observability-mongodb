@@ -28,7 +28,7 @@ management:
       prometheus:
         enabled: true
     tags:
-      application: 'address-api'
+      application: address-api
     distribution:
       slo:
         http: '5ms,10ms,25ms,50ms,100ms,200ms,300ms,400ms,500ms,1s,2s'
