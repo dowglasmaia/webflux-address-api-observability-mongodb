@@ -125,6 +125,7 @@
     </dependencyManagement>
 
     <build>
+        <finalName>address-api</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -138,7 +139,6 @@
                     </excludes>
                 </configuration>
             </plugin>
-
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

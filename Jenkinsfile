@@ -6,9 +6,9 @@ pipeline {
         PATH = "${tool 'JAVA_17'}/bin:${env.PATH}"
         SCANNER_HOME = tool 'SONAR_SCANNER'
         SONARQUBE_LOCAL = 'SONAR_LOCAL'
-        SONARQUBE_QG = 'SONAR_LOCAL_QG'  // Nome da configuração do Quality Gate no Jenkins
-        SONARQUBE_URL = 'http://localhost:9000/'  // URL do seu servidor SonarQube
-        SONARQUBE_TOKEN = 'c163ea73dffd8fb0214151b4b59770fe234885d2'  // Token de acesso do SonarQube
+        SONARQUBE_QG = 'SONAR_LOCAL_QG'
+        SONARQUBE_URL = 'http://localhost:9000/'
+        SONARQUBE_TOKEN = 'c163ea73dffd8fb0214151b4b59770fe234885d2'
         TOMCAT_LOGIN = 'TOMCAT_LOGIN'
         TOMCAT_URL = 'http://localhost:8001/'
     }
