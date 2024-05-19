@@ -1,8 +1,6 @@
 version: '3.8'
 
 networks:
-  public:
-  monit:
   api:
 
 services:
@@ -17,7 +15,6 @@ services:
       - 4318:4318
     networks:
       - api
-      - monit
 
   jaeger-api:
     image: jaegertracing/opentelemetry-all-in-one
@@ -25,7 +22,6 @@ services:
     ports:
       - 16686:16686
     networks:
-      - monit
       - api
     depends_on:
       - collector-api
@@ -33,13 +29,17 @@ services:
   address-api:
     image: dowglasmaia/address-api
     container_name: address-api
-    environment:
-      - SPRING_DATASOURCE_HOST=localhost
     networks:
       - api
     ports:
       - 8088:8088
     restart: unless-stopped
+    environment:
+      - SPRING_DATA_MONGODB_HOST=mongo
+      - SPRING_DATA_MONGODB_PORT=27017
+      - SPRING_DATA_MONGODB_DATABASE=addressdb
+      - SPRING_DATA_MONGODB_USERNAME=root
+      - SPRING_DATA_MONGODB_PASSWORD=example
 
   mongo:
     container_name: mongo
@@ -53,7 +53,6 @@ services:
     networks:
       - api
 
-
   mongo-express:
     image: mongo-express
     restart: unless-stopped
@@ -66,3 +65,21 @@ services:
       ME_CONFIG_BASICAUTH: false
     networks:
       - api
+
+
+
+#  address-api:
+#    build:
+#      context: .
+#     dockerfile: Dockerfile
+#   environment:
+#      - DOTEL_SERVICE_NAME=address-api
+#      - DOTEL_TRACES_EXPORTER=otlp
+#      - DOTEL_METRICS_EXPORTER=none
+#      - DOTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
+#      - DOTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
+#     - JAVA_TOOL_OPTIONS=-Duser.timezone=UTC-3
+#   ports:
+#     - 8088:8088
+#    volumes:
+#      - ./target:/usr/src/app/target

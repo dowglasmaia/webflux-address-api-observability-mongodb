@@ -19,6 +19,7 @@ import reactor.core.publisher.Mono;
 @Log4j2
 @Service
 public class AddressServiceImpl implements AddressService {
+
     @Autowired
     private AddressRepository repository;
     @Autowired
@@ -38,7 +39,7 @@ public class AddressServiceImpl implements AddressService {
                             this.getAddressByViaCepApi(zipCode)
                                     .doFirst(() -> log.info("Address not exist in DataBase with zip Code: {}", zipCode))
                                     .doFirst(() -> log.info("Start Method getAddressByViaCepApi with zipCode: {}", zipCode))
-                                    .flatMap(addressResponse -> insert(addressResponse))
+                                    .flatMap( addressResponse -> insert(addressResponse) )
 
                     )
                     .onErrorResume(error -> Mono.error(new RuntimeException("Unexpected error", error)))

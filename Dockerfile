@@ -1,15 +1,26 @@
 FROM amazoncorretto:17-alpine3.16
 
+LABEL MANTAINER="Dowglas Maia"
+
+ENV SPRING_LOGGING_LEVEL INFO
+ENV ACTUATOR_PORT 8088
+ENV PORT 8088
+
 ARG JAR_FILE=target/*.jar
-ARG OLTP=opentelemetry/opentelemetry-javaagent.jar
 
 COPY ${JAR_FILE} /usr/src/app/address-api.jar
-COPY ${OLTP} /usr/src/app/opentelemetry-javaagent.jar
+
+RUN rm -f /etc/localtime && ln -s /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
 
 WORKDIR /usr/src/app
-EXPOSE 8085
 
-RUN rm -f /etc/localtime && \
-    ln -s /usr/share/zoneinfo/America/Sao_Paulo /etc/localtime
+ENTRYPOINT java \
+           -noverify \
+           -Dfile.encoding=UTF-8 \
+           -Dlogging.level.root=${SPRING_LOGGING_LEVEL} \
+           -Dmanagement.server.port=${ACTUATOR_PORT} \
+           -jar \
+           /usr/src/app/address-api.jar \
+           --server.port=${PORT}
 
-CMD ["java","-Duser.timezone=UTC-3","-javaagent:/usr/src/app/opentelemetry-javaagent.jar","-jar","address-api.jar"]
+EXPOSE ${PORT} ${ACTUATOR_PORT}
