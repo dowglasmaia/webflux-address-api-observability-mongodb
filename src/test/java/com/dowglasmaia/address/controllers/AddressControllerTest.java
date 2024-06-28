@@ -60,6 +60,7 @@ public class AddressControllerTest {
                 .jsonPath("$.street").isEqualTo("Rua Test01");
 
     }
+
     @Test
     @DisplayName("Shoul return HTTP 404 when address is not found")
     void souldFindByZipCodeHttp404() {

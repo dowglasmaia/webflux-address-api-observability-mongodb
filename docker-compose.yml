@@ -26,7 +26,10 @@ services:
     depends_on:
       - collector-api
 
-  address-api:
+  api:
+    #build:
+      #context: .
+      #dockerfile: Dockerfile
     image: dowglasmaia/address-api
     container_name: address-api
     networks:
@@ -40,6 +43,11 @@ services:
       - SPRING_DATA_MONGODB_DATABASE=addressdb
       - SPRING_DATA_MONGODB_USERNAME=root
       - SPRING_DATA_MONGODB_PASSWORD=example
+      - DOTEL_SERVICE_NAME=address-api
+      - DOTEL_TRACES_EXPORTER=otlp
+      - DOTEL_METRICS_EXPORTER=none
+      - DOTEL_EXPORTER_OTLP_ENDPOINT=http://collector-api:4318
+      - DOTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
 
   mongo:
     container_name: mongo
@@ -65,21 +73,3 @@ services:
       ME_CONFIG_BASICAUTH: false
     networks:
       - api
-
-
-
-#  address-api:
-#    build:
-#      context: .
-#     dockerfile: Dockerfile
-#   environment:
-#      - DOTEL_SERVICE_NAME=address-api
-#      - DOTEL_TRACES_EXPORTER=otlp
-#      - DOTEL_METRICS_EXPORTER=none
-#      - DOTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
-#      - DOTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf
-#     - JAVA_TOOL_OPTIONS=-Duser.timezone=UTC-3
-#   ports:
-#     - 8088:8088
-#    volumes:
-#      - ./target:/usr/src/app/target
