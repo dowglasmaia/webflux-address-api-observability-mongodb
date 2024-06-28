@@ -27,9 +27,11 @@ services:
       - collector-api
 
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    #build:
+      #context: .
+      #dockerfile: Dockerfile
+    image: dowglasmaia/address-api
+    container_name: address-api
     networks:
       - api
     ports:
